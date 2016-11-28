@@ -15,10 +15,15 @@ services:
     command: -f /etc/logstash/conf.d/
     volumes:
       - ./logstash/config:/etc/logstash/conf.d
+      - clincapi_api-log-data:/etc/logstash/logging/
     ports:
-      - "5000:5000"
+      # 5000 - delete?
+      # - "5000:5000"
+      - "6010:6010"
+      - "6020:6020"
     networks:
       - docker_elk
+      - clincapi_default
   kibana:
     build: kibana/
     volumes:
@@ -28,6 +33,13 @@ services:
     networks:
       - docker_elk
 
+volumes:
+  clincapi_api-log-data:
+    external: true
+
 networks:
   docker_elk:
     driver: bridge
+  clincapi_default:
+    external:
+      name: clincapi_default
